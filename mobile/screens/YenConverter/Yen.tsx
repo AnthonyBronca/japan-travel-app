@@ -28,7 +28,13 @@ const Yen = () => {
             setStoredVal("");
             return;
         } else if(operator === "negate"){
-            setCurrent((prev)=> `-${prev}`);
+            setCurrent((prev)=> {
+                if(prev[0] === "-"){
+                    return prev.slice(1);
+                } else{
+                    return `-${prev}`;
+                }
+            });
             return;
         }{
             storeOperator(operator);
