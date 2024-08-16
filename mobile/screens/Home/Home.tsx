@@ -30,8 +30,8 @@ const Home: React.FC<IHomeProps> = ({ navigation }) => {
     { icon: settings, title: "Settings" },
   ];
 
-  const handleNav = () => {
-    console.log("hello")
+  const handleNav = (name: string) => {
+    navigation.navigate(name);
   }
 
   return (
@@ -43,7 +43,7 @@ const Home: React.FC<IHomeProps> = ({ navigation }) => {
               {buttons.map((el, idx) => (
                 <View key={`${el.title}-${idx}`}>
                   <Pressable
-                    onPress={() => console.log("pressed", el.title)}
+                    onPress={() => handleNav(el.title)}
                     style={({ pressed }) => [
                       {
                         opacity: pressed ? 0.2 : 1,
@@ -64,11 +64,7 @@ const Home: React.FC<IHomeProps> = ({ navigation }) => {
                 </View>
               ))}
             </View>
-
           </View>
-          {/* <Pressable onPress={handleNav}>
-        <Text>Go to Tweet</Text>
-        </Pressable> */}
         </View>
       </View>
   );
@@ -113,7 +109,6 @@ const stlyes = StyleSheet.create({
     gap: 50,
   },
   button: {
-    // backgroundColor: "blue",
     borderWidth: 2,
     borderColor: "black",
     height: 60,

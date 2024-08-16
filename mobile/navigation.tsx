@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import Tweet from "./screens/Tweet";
 import Home from "./screens/Home";
+import Yen from "./screens/YenConverter";
 
 
 
@@ -18,7 +18,7 @@ const RootNavigation: React.FC = (): JSX.Element => {
         <NavigationContainer>
             <Stack.Navigator screenOptions={screenOptions} initialRouteName="Home">
                 <Stack.Screen name='Home' component={Home} />
-                {/* <Stack.Screen name='Tweet' component={Tweet} /> */}
+                <Stack.Screen name='Yen/USD' component={Yen} />
             </Stack.Navigator>
         </NavigationContainer>
     )
