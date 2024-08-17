@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet, Dimensions, Pressable } from 'rea
 
 const Yen = () => {
 
-    type TypeEl = "+" | "-" | "/" | "*" | "%" | "clear" | "." | "=" | "" | "change" | "negate";
+    type TypeEl = "+" | "-" | "/" | "*" | "%" | "clear" | "." | "=" | "" | "negate";
 
     const [usd, setUsd] = useState(0);
     const [yen, setYen] = useState(0);
@@ -21,6 +21,16 @@ const Yen = () => {
         setCurrent("0");
     };
 
+
+
+    const changeMode = () => {
+        if(mode === "usd"){
+            setMode("yen");
+        } else{
+            setMode("usd");
+        }
+    }
+
     const handleOperator = (operator: TypeEl): void => {
        if (operator === "clear") {
             setCurrOperator("");
@@ -36,7 +46,11 @@ const Yen = () => {
                 }
             });
             return;
-        }{
+        }else if(operator === "%"){
+           setCurrent(String(Number(current) * .01));
+           setStoredVal(current);
+           setCurrOperator("");
+        }else{
             storeOperator(operator);
             return;
         }
@@ -64,6 +78,10 @@ const Yen = () => {
             setCurrent(String( currStore / currNum));
             setStoredVal("0");
             setCurrOperator("");
+        } else if( currOperator === "%") {
+            setCurrent(String(currNum * .01));
+            setStoredVal("0");
+            setCurrOperator("");
         }
     }
 
@@ -82,24 +100,24 @@ const Yen = () => {
             <View style={styles.body}>
                 <View style={styles.calculationBody}>
                     <Text style={styles.text}>Mode: {mode}</Text>
-                    <Text style={styles.text}>USD: {usd}</Text>
-                    <Text style={styles.text}>Yen: {yen}</Text>
+                    <Text style={styles.text}>USD: {`$${usd}`}</Text>
+                    <Text style={styles.text}>Yen: {`¥${yen}`}</Text>
                     <Text style={styles.text}>Current: {current}</Text>
                 </View>
                 <View style={styles.numberBody}>
                     <Pressable onPress={() => handleOperator("clear")}>
-                        <View style={styles.button}>
-                            <Text style={styles.text}>AC</Text>
+                        <View style={styles.specialButton}>
+                            <Text style={styles.specialText}>AC</Text>
                         </View>
                     </Pressable>
                     <Pressable onPress={() => handleOperator("negate")}>
-                        <View style={styles.button}>
-                            <Text style={styles.text}>+/-</Text>
+                        <View style={styles.specialButton}>
+                            <Text style={styles.specialText}>+/-</Text>
                         </View>
                     </Pressable>
                     <Pressable onPress={() => handleOperator("%")}>
-                        <View style={styles.button}>
-                            <Text style={styles.text}>%</Text>
+                        <View style={styles.specialButton}>
+                            <Text style={styles.specialText}>%</Text>
                         </View>
                     </Pressable>
                     <Pressable onPress={() => handleOperator("/")}>
@@ -177,9 +195,9 @@ const Yen = () => {
                             <Text style={styles.text}>.</Text>
                         </View>
                     </Pressable>
-                    <Pressable onPress={() => handleOperator("change")}>
+                    <Pressable onPress={() => changeMode()}>
                         <View style={styles.button}>
-                            <Text style={styles.text}>$</Text>
+                            <Text style={styles.text}>{mode === "yen" ? "$" : "¥"}</Text>
                         </View>
                     </Pressable>
                     <Pressable onPress={() => calculate()}>
@@ -200,36 +218,53 @@ const styles = StyleSheet.create({
     },
     body: {
         alignItems: 'center',
+        flex: 1,
     },
     calculationBody: {
-
+        paddingHorizontal: 20,
+        height: (Dimensions.get("window").height) / 3 ,
+        width: "100%"
     },
     button: {
         backgroundColor: "rgb(45,45,45)",
-        width: 60,
-        height: 60,
+        width: 70,
+        height: 70,
         borderRadius: 50,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+    },
+    specialButton: {
+        backgroundColor: "rgb(175,175,175)",
+        width: 70,
+        height: 70,
+        borderRadius: 50,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    specialText: {
+        color: "black",
+        fontSize: 35,
+        fontWeight: 600,
     },
     operatorButton: {
         backgroundColor: "orange",
-        width: 60,
-        height: 60,
+        width: 80,
+        height: 80,
         borderRadius: 50,
         alignItems: "center",
         justifyContent: "center"
     },
     numberBody: {
         flexDirection: "row",
-        gap: 35,
+        gap: 15,
         flexWrap: "wrap",
-        top: (Dimensions.get("window").height / 5),
+        justifyContent: "center",
         paddingHorizontal: 15
     },
     text: {
         color: "rgb(255, 255, 255)",
-        fontSize: 30
+        fontSize: 35,
+        fontWeight: 500
     }
 })
 
